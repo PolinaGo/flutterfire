@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
 import com.google.firebase.ml.common.modeldownload.FirebaseModelManager;
 import com.google.firebase.ml.custom.FirebaseCustomRemoteModel;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class ModelManager {
   @RequiresApi(api = Build.VERSION_CODES.N)
   public static void handleModelManager(@NonNull MethodCall call, @NonNull final Result result) {
+
     switch (call.method) {
       case "FirebaseModelManager#download":
         download(call, result);
@@ -57,7 +59,16 @@ public class ModelManager {
     }
 
     FirebaseModelDownloadConditions conditions = conditionsBuilder.build();
-    FirebaseModelManager.getInstance()
+
+    FirebaseModelManager modelManager;
+    if (call.argument("app") == null) {
+      modelManager = FirebaseModelManager.getInstance();
+    } else {
+      String app = call.argument("app");
+      modelManager = FirebaseModelManager.getInstance(FirebaseApp.getInstance(app));
+    }
+
+    modelManager
         .download(remoteModel, conditions)
         .addOnSuccessListener(
             new OnSuccessListener<Void>() {
@@ -82,7 +93,15 @@ public class ModelManager {
     final FirebaseCustomRemoteModel remoteModel =
         new FirebaseCustomRemoteModel.Builder(modelName).build();
 
-    FirebaseModelManager.getInstance()
+    FirebaseModelManager modelManager;
+    if (call.argument("app") == null) {
+      modelManager = FirebaseModelManager.getInstance();
+    } else {
+      String app = call.argument("app");
+      modelManager = FirebaseModelManager.getInstance(FirebaseApp.getInstance(app));
+    }
+
+    modelManager
         .getLatestModelFile(remoteModel)
         .addOnCompleteListener(
             new OnCompleteListener<File>() {
@@ -106,7 +125,15 @@ public class ModelManager {
     final FirebaseCustomRemoteModel remoteModel =
         new FirebaseCustomRemoteModel.Builder(modelName).build();
 
-    FirebaseModelManager.getInstance()
+    FirebaseModelManager modelManager;
+    if (call.argument("app") == null) {
+      modelManager = FirebaseModelManager.getInstance();
+    } else {
+      String app = call.argument("app");
+      modelManager = FirebaseModelManager.getInstance(FirebaseApp.getInstance(app));
+    }
+
+    modelManager
         .isModelDownloaded(remoteModel)
         .addOnCompleteListener(
             new OnCompleteListener<Boolean>() {
