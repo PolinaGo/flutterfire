@@ -28,10 +28,12 @@ class FirebaseModelManager {
   /// The [FirebaseModelManager] instance is a singleton for fixed [app].
   ///
   /// The [app] argument is the custom [FirebaseApp].
-  FirebaseModelManager({this.app}) {
+  FirebaseModelManager(this.app) {
     if (_initialized) return;
     _initialized = true;
   }
+
+  FirebaseModelManager._({this.app});
 
   /// Means for communication with native platform code
   @visibleForTesting
@@ -40,16 +42,14 @@ class FirebaseModelManager {
 
   static bool _initialized = false;
 
-  static FirebaseModelManager _instance = FirebaseModelManager();
+  /// Returns the [FirebaseStorage] instance, initialized with the default
+  /// [FirebaseApp].
+  static final FirebaseModelManager instance = FirebaseModelManager._();
 
   /// The [FirebaseApp] instance to which this [FirebaseModelManager] belongs.
   ///
   /// If null, the default [FirebaseApp] is used.
   final FirebaseApp app;
-
-  /// Returns the [FirebaseStorage] instance, initialized with the default
-  /// [FirebaseApp].
-  static FirebaseModelManager get instance => _instance;
 
   /// Initiates the download of remoteModel if the download hasn't begun.
   Future<void> download(FirebaseRemoteModel model,

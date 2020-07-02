@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tflite/tflite.dart';
@@ -50,10 +51,18 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<File> loadModelFromFirebase() async {
+    final FirebaseApp app = await FirebaseApp.configure(
+      name: 'flutter plugin',
+      options: const FirebaseOptions(
+        googleAppID: '12345',
+        apiKey: '12345',
+      )
+    );
+
     var model = FirebaseCustomRemoteModel('image_classification');
 
     var conditions = FirebaseModelDownloadConditions(requireWifi: true);
-    var modelManager = FirebaseModelManager.instance;
+    var modelManager = FirebaseModelManager(app);
 
     await modelManager.download(model, conditions);
     assert(await modelManager.isModelDownloaded(model) == true);
