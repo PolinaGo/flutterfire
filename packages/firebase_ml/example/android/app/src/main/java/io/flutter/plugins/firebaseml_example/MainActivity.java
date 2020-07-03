@@ -8,6 +8,8 @@ import io.flutter.plugins.imagepicker.ImagePickerPlugin;
 import io.flutter.plugins.pathprovider.PathProviderPlugin;
 import sq.flutter.tflite.TflitePlugin;
 
+import io.flutter.plugins.firebase.core.FirebaseCorePlugin;
+
 public class MainActivity extends FlutterActivity {
   @Override
   public void configureFlutterEngine(FlutterEngine flutterEngine) {
@@ -19,5 +21,6 @@ public class MainActivity extends FlutterActivity {
     ImagePickerPlugin.registerWith(
         shimPluginRegistry.registrarFor("io.flutter.plugins.imagepicker.ImagePickerPlugin"));
     TflitePlugin.registerWith(shimPluginRegistry.registrarFor("sq.flutter.tflite.TflitePlugin"));
+    FirebaseCorePlugin.registerWith(shimPluginRegistry.registrarFor("io.flutter.plugins.firebase.core.FirebaseCorePlugin"));
   }
 }
