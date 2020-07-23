@@ -6,6 +6,7 @@
 
 @interface TextRecognizer ()
 @property FIRVisionTextRecognizer *recognizer;
+@property FIRVisionDocumentTextRecognizer *recognizer2;
 @end
 
 @implementation TextRecognizer
@@ -19,6 +20,7 @@
               [[FIRVisionCloudTextRecognizerOptions alloc] init];
       options.languageHints = @[@"en", @"hi"];
       options.modelType = FIRVisionCloudTextModelTypeDense;
+      options.APIKeyOverride = @"AIzaSyD5pOSrZiJgvqk9cTInerfH1_R7MPEI_wI";
       _recognizer = [vision cloudTextRecognizerWithOptions:options];
 //      _recognizer = [vision cloudTextRecognizer];
     } else {
@@ -28,6 +30,8 @@
                                         reason:reason
                                       userInfo:nil];
     }
+    _recognizer2 = [vision cloudDocumentTextRecognizer];
+
   }
   return self;
 }
