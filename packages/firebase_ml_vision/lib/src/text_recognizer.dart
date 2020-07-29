@@ -4,6 +4,12 @@
 
 part of firebase_ml_vision;
 
+/// Option for controlling additional variables in performing text recognition.
+///
+/// Sparse model type is more suitable for sparse text.
+/// Dense model type is more suitable for well-formatted dense text.
+enum CloudTextModelType { sparse, dense }
+
 /// Detector for performing optical character recognition(OCR) on an input image.
 ///
 /// A text recognizer is created via `textRecognizer()` in [FirebaseVision]:
@@ -61,6 +67,19 @@ class TextRecognizer {
       <String, dynamic>{'handle': _handle},
     );
   }
+}
+
+/// Options for cloud text recognizer.
+class TextRecognizerOptions {
+  /// Constructor for [TextRecognizerOptions].
+  const TextRecognizerOptions({this.androidEnforceCertFingerprintMatch = false, this.iosAPIKeyOverride, this.hintedLanguages, this.textModelType = CloudTextModelType.sparse})
+      : assert(androidEnforceCertFingerprintMatch != null),
+        assert(textModelType != null);
+
+  final bool androidEnforceCertFingerprintMatch;
+  final String iosAPIKeyOverride;
+  final List<String> hintedLanguages;
+  final CloudTextModelType textModelType;
 }
 
 /// Recognized text in an image.
