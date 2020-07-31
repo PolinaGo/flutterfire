@@ -67,4 +67,11 @@ class FirebaseModelManager {
     return channel.invokeMethod("FirebaseModelManager#isModelDownloaded",
         {'modelName': model.modelName});
   }
+
+  /// Deletes the given [FirebaseRemoteModel] from the device.
+  Future<void> deleteDownloadedModel(FirebaseRemoteModel model) async {
+    assert(model != null);
+    return channel.invokeMethod("FirebaseModelManager#deleteDownloadedModel",
+        {'modelName': model.modelName});
+  }
 }

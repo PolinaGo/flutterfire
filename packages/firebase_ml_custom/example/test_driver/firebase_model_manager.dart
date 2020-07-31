@@ -28,6 +28,21 @@ void firebaseModelManagerTest() {
       expect(modelFile.path.contains(MODEL_NAME), isTrue);
     });
 
+    test('download and delete a model', () async {
+      final model = FirebaseCustomRemoteModel(MODEL_NAME);
+
+      final conditions = FirebaseModelDownloadConditions(
+          androidRequireWifi: true, iosAllowCellularAccess: false);
+
+      await modelManager.download(model, conditions);
+
+      await modelManager.deleteDownloadedModel(model);
+
+      final isModelDownloaded = await modelManager.isModelDownloaded(model);
+
+      expect(isModelDownloaded, false);
+    });
+
     test('throw an error when model is not downloaded', () async {
       final model = FirebaseCustomRemoteModel(INVALID_MODEL_NAME);
 

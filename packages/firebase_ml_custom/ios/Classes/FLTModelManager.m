@@ -13,6 +13,8 @@
     [FLTModelManager getLatestModelFile:call result:result];
   } else if ([@"FirebaseModelManager#isModelDownloaded" isEqualToString:call.method]) {
     [FLTModelManager isModelDownloaded:call result:result];
+  } else if ([@"FirebaseModelManager#deleteDownloadedModel" isEqualToString:call.method]) {
+    [FLTModelManager deleteDownloadedModel:call result:result];
   } else {
     result(FlutterMethodNotImplemented);
   }
@@ -91,6 +93,21 @@
 
   BOOL isModelDownloaded = [[FIRModelManager modelManager] isModelDownloaded:remoteModel];
   result(@(isModelDownloaded));
+}
+
++ (void)deleteDownloadedModel:(FlutterMethodCall *)call result:(FlutterResult)result {
+  NSString *modelName = call.arguments[@"modelName"];
+  FIRCustomRemoteModel *remoteModel = [[FIRCustomRemoteModel alloc] initWithName:modelName];
+
+  [FIRModelManager.modelManager
+      deleteDownloadedModel:remoteModel
+                  completion:^(NSError *error) {
+                    if (error == nil) {
+                      result(nil);
+                    } else {
+                      [FLTFirebaseMLCustomPlugin handleError:error result:result];
+                    }
+                  }];
 }
 
 @end

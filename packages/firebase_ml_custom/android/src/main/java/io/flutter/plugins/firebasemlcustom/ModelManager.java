@@ -30,6 +30,9 @@ public final class ModelManager {
       case "FirebaseModelManager#isModelDownloaded":
         isModelDownloaded(call, result);
         break;
+      case "FirebaseModelManager#deleteDownloadedModel":
+        deleteDownloadedModel(call, result);
+        break;
       default:
         result.notImplemented();
     }
@@ -125,5 +128,30 @@ public final class ModelManager {
                 }
               }
             });
+  }
+
+  private static void deleteDownloadedModel(@NonNull MethodCall call, @NonNull final Result result) {
+    assert (call.argument("modelName") != null);
+    String modelName = call.argument("modelName");
+
+    final FirebaseCustomRemoteModel remoteModel =
+            new FirebaseCustomRemoteModel.Builder(modelName).build();
+
+    FirebaseModelManager.getInstance()
+            .deleteDownloadedModel(remoteModel)
+            .addOnSuccessListener(
+                    new OnSuccessListener<Void>() {
+                      @Override
+                      public void onSuccess(Void v) {
+                        result.success(null);
+                      }
+                    })
+            .addOnFailureListener(
+                    new OnFailureListener() {
+                      @Override
+                      public void onFailure(@NonNull Exception exception) {
+                        result.error("FirebaseModelManager", exception.getLocalizedMessage(), null);
+                      }
+                    });
   }
 }

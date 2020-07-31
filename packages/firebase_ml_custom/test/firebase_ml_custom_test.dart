@@ -152,6 +152,15 @@ void main() {
             throwsA(isA<AssertionError>().having((e) => e.toString(), 'message',
                 contains("'model != null': is not true"))));
       });
+
+      test(
+          'throws exception when tries to delete model if model is null',
+              () {
+            expect(
+                modelManager.deleteDownloadedModel(null),
+                throwsA(isA<AssertionError>().having((e) => e.toString(), 'message',
+                    contains("'model != null': is not true"))));
+          });
     });
 
     group('when successfully communicates with native API', () {
@@ -167,6 +176,7 @@ void main() {
 
           switch (methodCall.method) {
             case 'FirebaseModelManager#download':
+            case 'FirebaseModelManager#deleteDownloadedModel':
               return null;
             case 'FirebaseModelManager#getLatestModelFile':
               return MODEL_FILE_PATH;
@@ -236,6 +246,22 @@ void main() {
           ],
         );
       });
+
+      test('deletes downloaded model', () async {
+        await modelManager.deleteDownloadedModel(model);
+
+        expect(
+          log,
+          <Matcher>[
+            isMethodCall(
+              'FirebaseModelManager#deleteDownloadedModel',
+              arguments: <String, dynamic>{
+                'modelName': MODEL_NAME,
+              },
+            ),
+          ],
+        );
+      });
     });
 
     group('when fails to communicate with native API', () {
@@ -277,6 +303,13 @@ void main() {
             modelManager.getLatestModelFile(model),
             throwsA(isA<PlatformException>().having(
                 (e) => e.toString(), 'message', contains(ERROR_MESSAGE))));
+      });
+
+      test('throws exception when fails to delete model', () async {
+        expect(
+            modelManager.deleteDownloadedModel(model),
+            throwsA(isA<PlatformException>().having(
+                    (e) => e.toString(), 'message', contains(ERROR_MESSAGE))));
       });
     });
   });
