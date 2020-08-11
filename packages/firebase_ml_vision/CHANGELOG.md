@@ -1,3 +1,19 @@
+## 0.9.6+1
+
+* Add options for cloud text recognition.
+
+## 0.9.6
+
+* Add recognition of text in document images through `DocumentTextRecognizer`. See `README.md` for more information.
+
+## 0.9.5+1
+
+* Add options for cloud text recognition.
+
+## 0.9.5
+
+* Fix for error if confidence is 1 or 0.
+
 ## 0.9.4
 
 * Update lower bound of dart dependency to 2.0.0.
