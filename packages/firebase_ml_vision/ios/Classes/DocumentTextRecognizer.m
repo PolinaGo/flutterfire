@@ -32,7 +32,7 @@
                      [FLTFirebaseMlVisionPlugin handleError:error result:result];
                      return;
                    } else if (!visionDocumentText) {
-                     result(@{@"text" : @"", @"blocks" : @[]});
+                     result(nil);
                      return;
                    }
                    NSMutableDictionary *visionDocumentTextData = [NSMutableDictionary dictionary];

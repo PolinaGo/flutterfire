@@ -44,9 +44,13 @@ class DocumentTextRecognizer implements Detector {
               @Override
               public void onSuccess(FirebaseVisionDocumentText firebaseDocumentVisionText) {
                 Map<String, Object> visionDocumentTextData = new HashMap<>();
-                visionDocumentTextData.put("text", firebaseDocumentVisionText.getText());
-                getBlockData(visionDocumentTextData, firebaseDocumentVisionText);
-                result.success(visionDocumentTextData);
+                if (firebaseDocumentVisionText == null) {
+                  result.success(null);
+                } else {
+                  visionDocumentTextData.put("text", firebaseDocumentVisionText.getText());
+                  getBlockData(visionDocumentTextData, firebaseDocumentVisionText);
+                  result.success(visionDocumentTextData);
+                }
               }
             })
         .addOnFailureListener(

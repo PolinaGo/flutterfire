@@ -55,12 +55,15 @@ class TextRecognizer implements Detector {
               @Override
               public void onSuccess(FirebaseVisionText firebaseVisionText) {
                 Map<String, Object> visionTextData = new HashMap<>();
-                visionTextData.put("text", firebaseVisionText.getText());
+                if (firebaseVisionText == null) {
+                  result.success(null);
+                } else {
+                  visionTextData.put("text", firebaseVisionText.getText());
 
-                List<Map<String, Object>> allBlockData = new ArrayList<>();
-                for (FirebaseVisionText.TextBlock block : firebaseVisionText.getTextBlocks()) {
-                  Map<String, Object> blockData = new HashMap<>();
-                  addData(
+                  List<Map<String, Object>> allBlockData = new ArrayList<>();
+                  for (FirebaseVisionText.TextBlock block : firebaseVisionText.getTextBlocks()) {
+                    Map<String, Object> blockData = new HashMap<>();
+                    addData(
                       blockData,
                       block.getBoundingBox(),
                       block.getConfidence(),
@@ -68,10 +71,10 @@ class TextRecognizer implements Detector {
                       block.getRecognizedLanguages(),
                       block.getText());
 
-                  List<Map<String, Object>> allLineData = new ArrayList<>();
-                  for (FirebaseVisionText.Line line : block.getLines()) {
-                    Map<String, Object> lineData = new HashMap<>();
-                    addData(
+                    List<Map<String, Object>> allLineData = new ArrayList<>();
+                    for (FirebaseVisionText.Line line : block.getLines()) {
+                      Map<String, Object> lineData = new HashMap<>();
+                      addData(
                         lineData,
                         line.getBoundingBox(),
                         line.getConfidence(),
@@ -79,10 +82,10 @@ class TextRecognizer implements Detector {
                         line.getRecognizedLanguages(),
                         line.getText());
 
-                    List<Map<String, Object>> allElementData = new ArrayList<>();
-                    for (FirebaseVisionText.Element element : line.getElements()) {
-                      Map<String, Object> elementData = new HashMap<>();
-                      addData(
+                      List<Map<String, Object>> allElementData = new ArrayList<>();
+                      for (FirebaseVisionText.Element element : line.getElements()) {
+                        Map<String, Object> elementData = new HashMap<>();
+                        addData(
                           elementData,
                           element.getBoundingBox(),
                           element.getConfidence(),
@@ -90,17 +93,18 @@ class TextRecognizer implements Detector {
                           element.getRecognizedLanguages(),
                           element.getText());
 
-                      allElementData.add(elementData);
+                        allElementData.add(elementData);
+                      }
+                      lineData.put("elements", allElementData);
+                      allLineData.add(lineData);
                     }
-                    lineData.put("elements", allElementData);
-                    allLineData.add(lineData);
+                    blockData.put("lines", allLineData);
+                    allBlockData.add(blockData);
                   }
-                  blockData.put("lines", allLineData);
-                  allBlockData.add(blockData);
-                }
 
-                visionTextData.put("blocks", allBlockData);
-                result.success(visionTextData);
+                  visionTextData.put("blocks", allBlockData);
+                  result.success(visionTextData);
+                }
               }
             })
         .addOnFailureListener(

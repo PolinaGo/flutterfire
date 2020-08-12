@@ -65,7 +65,7 @@ class TextRecognizer {
         'options': options,
       }..addAll(visionImage._serialize()),
     );
-
+    if (reply == null) return null;
     return VisionText._(reply);
   }
 

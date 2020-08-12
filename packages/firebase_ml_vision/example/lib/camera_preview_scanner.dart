@@ -126,6 +126,10 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
         if (_scanResults is! List<ImageLabel>) return noResultsText;
         painter = LabelDetectorPainter(imageSize, _scanResults);
         break;
+      case Detector.cloudDocumentText:
+        if (_scanResults is! VisionDocumentText) return noResultsText;
+        painter = DocumentTextDetectorPainter(imageSize, _scanResults);
+        break;
       default:
         assert(_currentDetector == Detector.text ||
             _currentDetector == Detector.cloudText);

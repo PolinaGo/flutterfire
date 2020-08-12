@@ -60,6 +60,7 @@ class DocumentTextRecognizer {
         },
       }..addAll(visionImage._serialize()),
     );
+    if (reply == null) return null;
     return VisionDocumentText._(reply);
   }
 
